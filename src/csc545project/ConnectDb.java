@@ -33,8 +33,8 @@ public class ConnectDb {
         
         String jdbcDriver = "oracle.jdbc.driver.OracleDriver";
         String jdbcUrl = "jdbc:oracle:thin:@157.89.28.31:1521:cscdb";  // URL for the database
-        String username = "yourUsername";
-        String password = "yourPassword";
+        String username = "c##MazurekJ545";
+        String password = "Pa$$2897";
 
         /*
          Specify the user account you will use to connect with the database:

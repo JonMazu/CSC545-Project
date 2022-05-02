@@ -243,8 +243,8 @@ public class CSC545Project extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         desktopPane.removeAll();
-        PlanFrame plan = new PlanFrame();
-        desktopPane.add(plan).setVisible(true);
+        //PlanFrame plan = new PlanFrame();
+        //desktopPane.add(plan).setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -256,8 +256,8 @@ public class CSC545Project extends javax.swing.JFrame {
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
         desktopPane.removeAll();
-        RefrigeratorInternalFrame refrig = new RefrigeratorInternalFrame();
-        desktopPane.add(refrig).setVisible(true);
+        //RefrigeratorInternalFrame refrig = new RefrigeratorInternalFrame();
+        //desktopPane.add(refrig).setVisible(true);
     }//GEN-LAST:event_jButton3ActionPerformed
 
     /**

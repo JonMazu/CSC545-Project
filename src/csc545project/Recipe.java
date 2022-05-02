@@ -15,20 +15,24 @@ import java.util.List;
  * @author Tyler
  */
 public class Recipe {
-    
+    private string id;
     private String name;
     private String category;
     private String instruction;
-    private List<String> ingriedents;
+    public List<String> ingriedents;
     Connection conn = null;
     OraclePreparedStatement pst = null;
     OracleResultSet rs = null;
     
-    public Recipe(String name, String category, String instruction, List<String> ingriedients){
+    public Recipe(String id, String name, String category, String instruction, List<String> ingriedients){
+        this.id = id;
         this.name = name;
         this.category = category;
         this.instruction = instruction;
         this.ingriedents = ingriedients;
+    }
+    public String getId(){
+        return this.id;
     }
     public String getName(){
         return this.name;
