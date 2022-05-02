@@ -1,4 +1,19 @@
 /*
+<<<<<<< HEAD
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package csc545project;
+
+import java.sql.Connection;
+import oracle.jdbc.OraclePreparedStatement;
+import oracle.jdbc.OracleResultSet;
+
+/**
+ *
+ * @author jacob
+=======
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JInternalFrame.java to edit this template
  */
@@ -7,16 +22,72 @@ package csc545project;
 /**
  *
  * @author 2001k
+>>>>>>> be315f17155f6d37b20f9b399ea7656e651a0cc4
  */
 public class RefrigeratorInternalFrame extends javax.swing.JInternalFrame {
 
     /**
+<<<<<<< HEAD
+     * Creates new form RefrigeratorIntenalFrame
+=======
      * Creates new form RefrigeratorInternalFrame
+>>>>>>> be315f17155f6d37b20f9b399ea7656e651a0cc4
      */
     public RefrigeratorInternalFrame() {
         initComponents();
     }
 
+<<<<<<< HEAD
+     public String[] RefrigContents(){
+        Connection conn = null;
+        OraclePreparedStatement pst = null;
+        OracleResultSet rs = null;
+        String[] contents = {};
+        boolean connected = false;
+        
+        conn = ConnectDb.setupConnection();
+        try
+        {
+        String sqlStatement = "SELECT name FROM JMTBingredient WHERE inFridge = TRUE";
+        
+        pst = (OraclePreparedStatement) conn.prepareStatement(sqlStatement);
+        
+        int i = 0;
+        connected = true;
+        while(rs.next()){
+            String name = rs.getNString("name");
+            contents[i] = name;
+            i++;
+        }
+       
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            ConnectDb.close(pst);
+            ConnectDb.close(conn);
+        }
+        String Empty[] = {"Empty Fridge"};
+        if(connected || contents.length > 0){
+            return contents; 
+        } else {
+            return Empty;
+        }
+    }
+     
+      public void main(String args[]) {
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                jList1.setListData(RefrigContents());
+            }
+        });
+    }
+    
+=======
+>>>>>>> be315f17155f6d37b20f9b399ea7656e651a0cc4
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -26,15 +97,40 @@ public class RefrigeratorInternalFrame extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+<<<<<<< HEAD
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jList1 = new javax.swing.JList<>();
+
+        jList1.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        jScrollPane1.setViewportView(jList1);
+
+=======
+>>>>>>> be315f17155f6d37b20f9b399ea7656e651a0cc4
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+<<<<<<< HEAD
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1231, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 590, Short.MAX_VALUE)
+                .addContainerGap())
+=======
             .addGap(0, 394, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 274, Short.MAX_VALUE)
+>>>>>>> be315f17155f6d37b20f9b399ea7656e651a0cc4
         );
 
         pack();
@@ -42,5 +138,10 @@ public class RefrigeratorInternalFrame extends javax.swing.JInternalFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+<<<<<<< HEAD
+    private javax.swing.JList<String> jList1;
+    private javax.swing.JScrollPane jScrollPane1;
+=======
+>>>>>>> be315f17155f6d37b20f9b399ea7656e651a0cc4
     // End of variables declaration//GEN-END:variables
 }
