@@ -1,3 +1,7 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JInternalFrame.java to edit this template
+ */
 package csc545project;
 import java.sql.Connection;
 import java.util.ArrayList;
@@ -5,28 +9,24 @@ import java.util.List;
 import oracle.jdbc.OraclePreparedStatement;
 import oracle.jdbc.OracleResultSet;
 
-
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
-
 /**
  *
- * @author 2001k
+ * @author knux1
  */
-public class RecipeFrame extends javax.swing.JFrame {
-
+public class RecipeFrameIn extends javax.swing.JInternalFrame {
     Connection conn = null;
     OraclePreparedStatement pst = null;
     OracleResultSet rs = null;
     List<Recipe> recipes = new ArrayList<Recipe>();
     Recipe selectedRecipe = null;
+    Ingredient SelectedFood = null;
+    List<Ingredient> allFood = null;
+    List<String> allFoodID = null;
     boolean inFridge = false;
     /**
-     * Creates new form RecipeFrame
+     * Creates new form RecipeFrameIn
      */
-    public RecipeFrame() {
+    public RecipeFrameIn() {
         initComponents();
     }
 
@@ -81,8 +81,6 @@ public class RecipeFrame extends javax.swing.JFrame {
         searchByIngri = new javax.swing.JButton();
         RecipeList = new java.awt.List();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
         jLayeredPane2.setOpaque(true);
 
         newRecipeInstructions.setColumns(20);
@@ -128,6 +126,12 @@ public class RecipeFrame extends javax.swing.JFrame {
         addNewFood.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 addNewFoodActionPerformed(evt);
+            }
+        });
+
+        ingridientList.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ingridientListActionPerformed(evt);
             }
         });
 
@@ -304,7 +308,7 @@ public class RecipeFrame extends javax.swing.JFrame {
                 .addGroup(jLayeredPane2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(addFoodtoRecipe)
                     .addComponent(removedFoodFromRecipe))
-                .addContainerGap(26, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jLayeredPane1.addHierarchyListener(new java.awt.event.HierarchyListener() {
@@ -437,16 +441,218 @@ public class RecipeFrame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void RecipeListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RecipeListActionPerformed
-        int selected = RecipeList.getSelectedIndex();
-        List<String> Ingridients =  recipes.get(selected).getIngriedents();
-        for(int x =0;x<Ingridients.size()-1;x++){
-            IngriendentList.add(Ingridients.get(x));
-        }
-        recipeInstructions.setText(recipes.get(selected).getInstructions());
-        selectedRecipe = recipes.get(selected);
+    private void newFoodNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newFoodNameActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_newFoodNameActionPerformed
 
-    }//GEN-LAST:event_RecipeListActionPerformed
+    private void newFoodCaloriesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newFoodCaloriesActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_newFoodCaloriesActionPerformed
+
+    private void isInFridgeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_isInFridgeActionPerformed
+        if(inFridge){
+            inFridge = false;
+        }
+        else{
+            inFridge =true;
+        }
+    }//GEN-LAST:event_isInFridgeActionPerformed
+
+    private void addNewFoodActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addNewFoodActionPerformed
+        String Name = null;
+        String Category = null;
+        int Calories = 0;
+        int Sugar = 0;
+        int Protein = 0;
+        int Sodium = 0;
+        int Fat = 0;
+        try{
+            Name = newFoodName.getText();
+            Category = newFoodCategory.getText();
+            Calories = Integer.parseInt(newFoodCalories.getText());
+            Sugar = Integer.parseInt(newFoodSugar.getText());
+            Protein = Integer.parseInt(newFoodProtein.getText());
+            Sodium = Integer.parseInt(newFoodSodium.getText());
+            Fat = Integer.parseInt(newFoodFat.getText());
+        }
+        catch(NumberFormatException e){
+            e.printStackTrace();
+        }
+        Ingredient newFood = new Ingredient(Name,Category,Calories,Sugar,Protein,Sodium,Fat,inFridge);
+        allFood.add(newFood);
+        newRecipeIngridients.add(Name);
+        conn = ConnectDb.setupConnection();
+        try
+        {
+            String sqlStatement = "select ingredientID from JBMTinngredient Where name=?,calories=?,sugar=?,protein=?,sodium=?,fat=?";
+            // Do we want to print the category along with this considering this is what we searched by.
+            pst = (OraclePreparedStatement) conn.prepareStatement(sqlStatement);
+            pst.setString(1, Name);
+            pst.setString(2,  Category);
+            pst.setString(3,  Calories+"");
+            pst.setString(4,  Sugar+"");
+            pst.setString(5,  Protein+"");
+            pst.setString(6,  Fat+"");
+            rs = (OracleResultSet) pst.executeQuery();
+            while (rs.next())
+            {
+                allFoodID.add(rs.getString("INGREDIENTID"));
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            ConnectDb.close(rs);
+            ConnectDb.close(pst);
+            ConnectDb.close(conn);
+        }
+    }//GEN-LAST:event_addNewFoodActionPerformed
+
+    private void ingridientListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ingridientListActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ingridientListActionPerformed
+
+    private void addFoodtoRecipeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addFoodtoRecipeActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_addFoodtoRecipeActionPerformed
+
+    private void submitNewRecipeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitNewRecipeActionPerformed
+        List<String> empty = new ArrayList();
+        Recipe newRecipe = new Recipe(newRecipeName.getText(),newRecipeCategory.getText(),newRecipeInstructions.getText(),empty);
+        int recipeID= 0;
+        newRecipe.saveToDatabase();
+        try
+        {
+            String sqlStatement = "select id from JMBTrecipe where name=? and category=?";
+            // Do we want to print the category along with this considering this is what we searched by.
+            pst = (OraclePreparedStatement) conn.prepareStatement(sqlStatement);
+            pst.setString(1, newRecipe.getName());
+            pst.setString(2, newRecipe.getCategory());
+
+            rs = (OracleResultSet) pst.executeQuery();
+            while (rs.next())
+            {
+                recipeID = rs.getInt("ID");
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            ConnectDb.close(rs);
+            ConnectDb.close(pst);
+            ConnectDb.close(conn);
+        }
+        for(int x = 0; x < newRecipeIngridients.getWidth();x++){
+            try
+            {
+                //Adding the INgredients for the Recipe
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+            finally
+            {
+                ConnectDb.close(pst);
+                ConnectDb.close(conn);
+            }
+        }
+    }//GEN-LAST:event_submitNewRecipeActionPerformed
+
+    private void deleteRecipeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteRecipeActionPerformed
+        conn = ConnectDb.setupConnection();
+        List<Recipe> recipes = new ArrayList<Recipe>();
+        try
+        {
+            String sqlStatement = "delete JMTBrecipe where name=? and category = ?";
+            // Do we just want the recipe and category here? Are we also wanting to include the associated ingredients with these, or the instructions?
+            // What about days of these meals? Are we wanting to give the user information on when this meal is scheduled for?
+            pst = (OraclePreparedStatement) conn.prepareStatement(sqlStatement);
+            pst.setString(1,  selectedRecipe.getName());
+            pst.setString(2,  selectedRecipe.getCategory());
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            ConnectDb.close(pst);
+            ConnectDb.close(conn);
+        }
+        recipes.remove(selectedRecipe);
+        RecipeList.remove(selectedRecipe.getName());
+        IngriendentList.removeAll();
+        recipeInstructions.setText("");
+    }//GEN-LAST:event_deleteRecipeActionPerformed
+
+    private void addNewRecipeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addNewRecipeActionPerformed
+        jLayeredPane2.setLayer(jLayeredPane2, 0);
+        jLayeredPane1.setLayer(jLayeredPane1, 0);
+        conn = ConnectDb.setupConnection();
+        try
+        {
+            String sqlStatement = "select * from JBMTinngredient";
+            // Do we want to print the category along with this considering this is what we searched by.
+            pst = (OraclePreparedStatement) conn.prepareStatement(sqlStatement);
+
+            rs = (OracleResultSet) pst.executeQuery();
+            while (rs.next())
+            {
+                allFood.add(new Ingredient(rs.getString("NAME"),rs.getString("CATEGORY"),rs.getInt("CALORIES"),rs.getInt("SUGAR"),rs.getInt("PROTEIN"),rs.getInt("SODIUM"),rs.getInt("FAT"),rs.getBoolean("INFRIDGE")));
+                allFoodID.add(rs.getString("INGREDIENTID"));
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            ConnectDb.close(rs);
+            ConnectDb.close(pst);
+            ConnectDb.close(conn);
+        }
+
+    }//GEN-LAST:event_addNewRecipeActionPerformed
+
+    private void searchByCatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchByCatActionPerformed
+        RecipeList.removeAll();
+        recipes.removeAll(recipes);
+        Connection conn = ConnectDb.setupConnection();
+        try
+        {
+            String sqlStatement = "select name, category,instructions from JMTBrecipe where category=?";
+            // Do we want to print the category along with this considering this is what we searched by.
+            pst = (OraclePreparedStatement) conn.prepareStatement(sqlStatement);
+            pst.setString(1, searchBar.getText());
+
+            rs = (OracleResultSet) pst.executeQuery();
+            while (rs.next())
+            {
+                recipes.add(new Recipe(rs.getString("REC_NAME"), rs.getString("CATEGORY"),rs.getString("INSTRUCTIONS"),getIngriedents(rs.getString("REC_NAME"))));
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            ConnectDb.close(rs);
+            ConnectDb.close(pst);
+            ConnectDb.close(conn);
+        }
+        for(int x=0;x<recipes.size();x++){
+            RecipeList.add(recipes.get(x).getName() + recipes.get(x).getCategory());
+        }
+    }//GEN-LAST:event_searchByCatActionPerformed
 
     private void searchByIngriActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchByIngriActionPerformed
         RecipeList.removeAll();
@@ -481,232 +687,22 @@ public class RecipeFrame extends javax.swing.JFrame {
         for(int x=0;x<recipes.size();x++){
             RecipeList.add(recipes.get(x).getName() + recipes.get(x).getCategory());
         }
-
     }//GEN-LAST:event_searchByIngriActionPerformed
 
-    private void searchByCatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchByCatActionPerformed
-        RecipeList.removeAll();
-        recipes.removeAll(recipes);
-        Connection conn = ConnectDb.setupConnection();
-        try
-        {
-            String sqlStatement = "select name, category,instructions from JMTBrecipe where category=?";
-            // Do we want to print the category along with this considering this is what we searched by.
-            pst = (OraclePreparedStatement) conn.prepareStatement(sqlStatement);
-            pst.setString(1, searchBar.getText());
-
-            rs = (OracleResultSet) pst.executeQuery();
-            while (rs.next())
-            {
-                recipes.add(new Recipe(rs.getString("REC_NAME"), rs.getString("CATEGORY"),rs.getString("INSTRUCTIONS"),getIngriedents(rs.getString("REC_NAME"))));
-            }
+    private void RecipeListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RecipeListActionPerformed
+        int selected = RecipeList.getSelectedIndex();
+        List<String> Ingridients =  recipes.get(selected).getIngriedents();
+        for(int x =0;x<Ingridients.size()-1;x++){
+            IngriendentList.add(Ingridients.get(x));
         }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-        finally
-        {
-            ConnectDb.close(rs);
-            ConnectDb.close(pst);
-            ConnectDb.close(conn);
-        }
-        for(int x=0;x<recipes.size();x++){
-            RecipeList.add(recipes.get(x).getName() + recipes.get(x).getCategory());
-        }
-
-    }//GEN-LAST:event_searchByCatActionPerformed
-
-    private void deleteRecipeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteRecipeActionPerformed
-        conn = ConnectDb.setupConnection();
-        List<Recipe> recipes = new ArrayList<Recipe>();
-        try
-        {
-            String sqlStatement = "delete JMTBrecipe where name=? and category = ?";
-            // Do we just want the recipe and category here? Are we also wanting to include the associated ingredients with these, or the instructions?
-            // What about days of these meals? Are we wanting to give the user information on when this meal is scheduled for?
-            pst = (OraclePreparedStatement) conn.prepareStatement(sqlStatement);
-            pst.setString(1,  selectedRecipe.getName());
-            pst.setString(2,  selectedRecipe.getCategory());
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-        finally
-        {
-            ConnectDb.close(pst);
-            ConnectDb.close(conn);
-        }
-        recipes.remove(selectedRecipe);
-        RecipeList.remove(selectedRecipe.getName());
-        IngriendentList.removeAll();
-        recipeInstructions.setText("");
-    }//GEN-LAST:event_deleteRecipeActionPerformed
+        recipeInstructions.setText(recipes.get(selected).getInstructions());
+        selectedRecipe = recipes.get(selected);
+    }//GEN-LAST:event_RecipeListActionPerformed
 
     private void jLayeredPane1HierarchyChanged(java.awt.event.HierarchyEvent evt) {//GEN-FIRST:event_jLayeredPane1HierarchyChanged
         // TODO add your handling code here:
     }//GEN-LAST:event_jLayeredPane1HierarchyChanged
 
-    private void newFoodNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newFoodNameActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_newFoodNameActionPerformed
-
-    private void isInFridgeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_isInFridgeActionPerformed
-       if(inFridge){
-           inFridge = false;
-       }
-       else{
-           inFridge =true;
-       }
-    }//GEN-LAST:event_isInFridgeActionPerformed
-
-    private void addNewFoodActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addNewFoodActionPerformed
-       String Name = null;
-        String Category = null;
-        int Calories = 0;
-        int Sugar = 0;
-        int Protein = 0;
-        int Sodium = 0;
-        int Fat = 0;
-        try{
-           Name = newFoodName.getText();
-           Category = newFoodCategory.getText();
-           Calories = Integer.parseInt(newFoodCalories.getText());
-           Sugar = Integer.parseInt(newFoodSugar.getText());
-           Protein = Integer.parseInt(newFoodProtein.getText());
-           Sodium = Integer.parseInt(newFoodSodium.getText());
-           Fat = Integer.parseInt(newFoodFat.getText());
-       }
-       catch(NumberFormatException e){
-           e.printStackTrace();
-       }
-       Ingredient newFood = new Ingredient(Name,Category,Calories,Sugar,Protein,Sodium,Fat,inFridge);
-    }//GEN-LAST:event_addNewFoodActionPerformed
-
-    private void addFoodtoRecipeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addFoodtoRecipeActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_addFoodtoRecipeActionPerformed
-
-    private void newFoodCaloriesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newFoodCaloriesActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_newFoodCaloriesActionPerformed
-
-    private void submitNewRecipeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitNewRecipeActionPerformed
-       List<String> empty = new ArrayList();
-       Recipe newRecipe = new Recipe(newRecipeName.getText(),newRecipeCategory.getText(),newRecipeInstructions.getText(),empty);
-       int recipeID= 0;
-       newRecipe.saveToDatabase();
-        try
-        {
-            String sqlStatement = "select id from recipe where name=? and category=?";
-            // Do we want to print the category along with this considering this is what we searched by.
-            pst = (OraclePreparedStatement) conn.prepareStatement(sqlStatement);
-            pst.setString(1, newRecipe.getName());
-            pst.setString(2, newRecipe.getCategory());
-            
-            rs = (OracleResultSet) pst.executeQuery();
-            while (rs.next())
-            {
-                recipeID = rs.getInt("ID");
-            }
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-        finally
-        {
-            ConnectDb.close(rs);
-            ConnectDb.close(pst);
-            ConnectDb.close(conn);
-        }
-        for(int x = 0; x < newRecipeIngridients.getWidth();x++){
-             try
-        {
-            String sqlStatement = "insert into ingredient(name, category) values(?, ?)";
-            
-            pst = (OraclePreparedStatement) conn.prepareStatement(sqlStatement);
-            pst.setString(1, this.name);
-            pst.setString(2, this.category);
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-        finally
-        {
-            ConnectDb.close(pst);
-            ConnectDb.close(conn);
-        }
-        }
-    }//GEN-LAST:event_submitNewRecipeActionPerformed
-
-    private void addNewRecipeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addNewRecipeActionPerformed
-        jLayeredPane2.setLayer(jLayeredPane2, 0);
-        jLayeredPane1.setLayer(jLayeredPane1, 0);
-    }//GEN-LAST:event_addNewRecipeActionPerformed
-
-    /**
-     * @param args the command line arguments
-     */
-    public void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(RecipeFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(RecipeFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(RecipeFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(RecipeFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new RecipeFrame().setVisible(true);
-            }
-        });
-    }
-    public List<String> getIngriedents(String recipe){
-        List<String> ingriendents = new ArrayList<String>();
-        conn = ConnectDb.setupConnection();
-        try{ 
-            String sqlStatement = "select JMTBingredient.name from (JMTBrecipe natural join JMTBusesingredient natural join JMTBingredient) where recipet.name=?";
-            pst = (OraclePreparedStatement) conn.prepareStatement(sqlStatement);
-            pst.setString(1, recipe);
-            rs = (OracleResultSet) pst.executeQuery();
-            while (rs.next())
-            {
-                ingriendents.add(rs.getString("ING_NAME"));
-            }
-              
-          }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-        finally
-        {
-            ConnectDb.close(rs);
-            ConnectDb.close(pst);
-            ConnectDb.close(conn);
-        }
-          return ingriendents;
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private java.awt.List IngriendentList;
@@ -751,5 +747,4 @@ public class RecipeFrame extends javax.swing.JFrame {
     private javax.swing.JButton searchByIngri;
     private javax.swing.JButton submitNewRecipe;
     // End of variables declaration//GEN-END:variables
-
 }

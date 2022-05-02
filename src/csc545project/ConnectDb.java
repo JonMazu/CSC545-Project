@@ -41,7 +41,7 @@ public class ConnectDb {
          - user name (e.g., myName)
          - password (e.g., myPassword)
          */
-        
+        /*
         try{
             Scanner creds = new Scanner(new File("./pass.ini"));
             while(creds.hasNextLine()){
@@ -57,7 +57,7 @@ public class ConnectDb {
         catch (FileNotFoundException e){
             e.printStackTrace();
         }
-
+*/
         
         try
         {
