@@ -30,6 +30,18 @@ public class Recipe {
         this.instruction = instruction;
         this.ingriedents = ingriedients;
     }
+    public String getName(){
+        return this.name;
+    }
+    public List<String> getIngriedents(){
+        return this.ingriedents;
+    }
+    public String getInstructions(){
+        return this.instruction;
+    }
+    public String getCategory(){
+        return this.category;
+    }
     
     public void saveToDatabase(){
         conn = ConnectDb.setupConnection();
@@ -115,9 +127,7 @@ public class Recipe {
         }
         return recipes;
     }
-    public String getName(){
-        return this.name;
-    }
+   
     public List<String> getIngriedents(String recipe){
         List<String> ingriendents = new ArrayList<String>();
         conn = ConnectDb.setupConnection();
