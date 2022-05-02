@@ -10,6 +10,9 @@ import java.sql.DriverManager;
 import javax.swing.JOptionPane;
 import oracle.jdbc.OraclePreparedStatement;
 import oracle.jdbc.OracleResultSet;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
 
 /**
  *
@@ -30,14 +33,31 @@ public class ConnectDb {
         
         String jdbcDriver = "oracle.jdbc.driver.OracleDriver";
         String jdbcUrl = "jdbc:oracle:thin:@157.89.28.31:1521:cscdb";  // URL for the database
+        String username = "yourUsername";
+        String password = "yourPassword";
 
         /*
          Specify the user account you will use to connect with the database:
          - user name (e.g., myName)
          - password (e.g., myPassword)
          */
-        String username = "yourUsername";
-        String password = "yourPassword";
+        
+        try{
+            Scanner creds = new Scanner(new File("./pass.ini"));
+            while(creds.hasNextLine()){
+                String option = creds.nextLine();
+                if(option.indexOf("username:")!= -1){
+                    username = option.substring((option.indexOf(":")+1));
+                }
+                if(option.indexOf("pass:")!= -1){
+                    password = option.substring((option.indexOf(":")+1));
+                }
+            }
+        }
+        catch (FileNotFoundException e){
+            e.printStackTrace();
+        }
+
         
         try
         {

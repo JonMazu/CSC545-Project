@@ -6,8 +6,10 @@
 package csc545project;
 
 import java.sql.Connection;
+import java.util.ArrayList;
 import oracle.jdbc.OraclePreparedStatement;
 import oracle.jdbc.OracleResultSet;
+import java.util.List;
 /**
  *
  * @author Tyler
@@ -16,14 +18,17 @@ public class Recipe {
     
     private String name;
     private String category;
-    
+    private String instruction;
+    private List<String> ingriedents;
     Connection conn = null;
     OraclePreparedStatement pst = null;
     OracleResultSet rs = null;
     
-    public Recipe(String name, String category){
+    public Recipe(String name, String category, String instruction, List<String> ingriedients){
         this.name = name;
         this.category = category;
+        this.instruction = instruction;
+        this.ingriedents = ingriedients;
     }
     
     public void saveToDatabase(){
@@ -47,8 +52,9 @@ public class Recipe {
         }
     }
     
-    public void searchByCategory(String c){
+    public  List<Recipe> searchByCategory(String c){
         conn = ConnectDb.setupConnection();
+        List<Recipe> recipes = new ArrayList<Recipe>();
         try
         {
             String sqlStatement = "select name, category from recipe where category=?";
@@ -57,16 +63,11 @@ public class Recipe {
             pst.setString(1, c);
             
             rs = (OracleResultSet) pst.executeQuery();
-           System.out.println("Recipes returned:");
             while (rs.next())
             {
-                String rec_name = rs.getString("REC_NAME");
-                String cat = rs.getString("CATEGORY");
-
-                // print names and prices and left align them
-                // Same point as above, are we wanting to print out the category along with this considering this
-                // is what the user searched for in the first place. Possibly a place of redundancy.
-                System.out.printf("%-32s%%-32s", rec_name, cat);
+                
+                recipes.add(new Recipe(rs.getString("REC_NAME"), rs.getString("CATEGORY"),rs.getString("INSTRUCTIONS"),getIngriedents(rs.getString("REC_NAME"))));
+                
             }
         }
         catch (Exception e)
@@ -79,10 +80,12 @@ public class Recipe {
             ConnectDb.close(pst);
             ConnectDb.close(conn);
         }
+        return recipes;
     }
     
-    public void searchByIngredient(String i){
+    public List<Recipe> searchByIngredient(String i){
         conn = ConnectDb.setupConnection();
+        List<Recipe> recipes = new ArrayList<Recipe>();
         try
         {
             String sqlStatement = "select recipe.name, category from (recipe natural join usesingredient natural join ingredient) where ingredient.name=?";
@@ -97,9 +100,7 @@ public class Recipe {
             {
                 String rec_name = rs.getString("REC_NAME");
                 String cat = rs.getString("CATEGORY");
-
-                // print names and prices and left align them
-                System.out.printf("%-32s%%-32s", rec_name, cat);
+                recipes.add(new Recipe(rs.getString("REC_NAME"), rs.getString("CATEGORY"),rs.getString("INSTRUCTIONS"),getIngriedents(rs.getString("REC_NAME"))));
             }
         }
         catch (Exception e)
@@ -112,5 +113,35 @@ public class Recipe {
             ConnectDb.close(pst);
             ConnectDb.close(conn);
         }
+        return recipes;
+    }
+    public String getName(){
+        return this.name;
+    }
+    public List<String> getIngriedents(String recipe){
+        List<String> ingriendents = new ArrayList<String>();
+        conn = ConnectDb.setupConnection();
+        try{ 
+            String sqlStatement = "select ingredient.name from (recipe natural join usesingredient natural join ingredient) where recipet.name=?";
+            pst = (OraclePreparedStatement) conn.prepareStatement(sqlStatement);
+            pst.setString(1, recipe);
+            rs = (OracleResultSet) pst.executeQuery();
+            while (rs.next())
+            {
+                ingriendents.add(rs.getString("ING_NAME"));
+            }
+              
+          }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            ConnectDb.close(rs);
+            ConnectDb.close(pst);
+            ConnectDb.close(conn);
+        }
+          return ingriendents;
     }
 }

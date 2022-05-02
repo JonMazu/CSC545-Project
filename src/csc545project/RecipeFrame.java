@@ -1,4 +1,10 @@
 package csc545project;
+import java.sql.Connection;
+import java.util.ArrayList;
+import java.util.List;
+import oracle.jdbc.OraclePreparedStatement;
+import oracle.jdbc.OracleResultSet;
+
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -11,6 +17,10 @@ package csc545project;
  */
 public class RecipeFrame extends javax.swing.JFrame {
 
+    Connection conn = null;
+    OraclePreparedStatement pst = null;
+    OracleResultSet rs = null;
+    List<Recipe> recipes = new ArrayList<Recipe>();
     /**
      * Creates new form RecipeFrame
      */
@@ -27,26 +37,166 @@ public class RecipeFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jScrollPane1 = new javax.swing.JScrollPane();
+        searchBar = new javax.swing.JTextPane();
+        searchByCat = new javax.swing.JButton();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        recipeInstructions = new javax.swing.JTextArea();
+        searchByIngri = new javax.swing.JButton();
+        RecipeList = new java.awt.List();
+        IngriendentList = new java.awt.List();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jScrollPane1.setViewportView(searchBar);
+
+        searchByCat.setText("Search by Category");
+        searchByCat.setActionCommand("search");
+        searchByCat.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                searchByCatActionPerformed(evt);
+            }
+        });
+
+        recipeInstructions.setColumns(20);
+        recipeInstructions.setRows(5);
+        jScrollPane4.setViewportView(recipeInstructions);
+
+        searchByIngri.setText("Search by Igridient");
+        searchByIngri.setActionCommand("search");
+        searchByIngri.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                searchByIngriActionPerformed(evt);
+            }
+        });
+
+        RecipeList.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                RecipeListActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1251, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 237, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(searchByCat)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(searchByIngri))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(RecipeList, javax.swing.GroupLayout.PREFERRED_SIZE, 307, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(IngriendentList, javax.swing.GroupLayout.PREFERRED_SIZE, 265, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 881, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 631, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(20, 20, 20)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(searchByCat)
+                        .addComponent(searchByIngri))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 481, Short.MAX_VALUE)
+                    .addComponent(RecipeList, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(IngriendentList, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(90, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void searchByCatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchByCatActionPerformed
+        RecipeList.removeAll();
+        recipes.removeAll(recipes);
+        Connection conn = ConnectDb.setupConnection();
+        try
+        {
+            String sqlStatement = "select name, category,instructions from JMTBrecipe where category=?";
+            // Do we want to print the category along with this considering this is what we searched by.
+            pst = (OraclePreparedStatement) conn.prepareStatement(sqlStatement);
+            pst.setString(1, searchBar.getText());
+            
+            rs = (OracleResultSet) pst.executeQuery();
+            while (rs.next())
+            {
+                recipes.add(new Recipe(rs.getString("REC_NAME"), rs.getString("CATEGORY"),rs.getString("INSTRUCTIONS"),getIngriedents(rs.getString("REC_NAME"))));   
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            ConnectDb.close(rs);
+            ConnectDb.close(pst);
+            ConnectDb.close(conn);
+        }
+        for(int x=0;x<recipes.size();x++){
+             RecipeList.add(recipes.get(x).getName());
+        }
+
+    
+        
+    }//GEN-LAST:event_searchByCatActionPerformed
+
+    private void searchByIngriActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchByIngriActionPerformed
+        RecipeList.removeAll();
+        recipes.removeAll(recipes);
+        conn = ConnectDb.setupConnection();
+        List<Recipe> recipes = new ArrayList<Recipe>();
+        try
+        {
+            String sqlStatement = "select JMTBrecipe.name, category,instructions from (JMTBrecipe natural join JMTBusesingredient natural join JMTBingredient) where JMTBingredient.name=?";
+            // Do we just want the recipe and category here? Are we also wanting to include the associated ingredients with these, or the instructions?
+            // What about days of these meals? Are we wanting to give the user information on when this meal is scheduled for?
+            pst = (OraclePreparedStatement) conn.prepareStatement(sqlStatement);
+            pst.setString(1,  searchBar.getText());
+            
+            rs = (OracleResultSet) pst.executeQuery();
+           System.out.println("Recipes returned:");
+            while (rs.next())
+            {
+                recipes.add(new Recipe(rs.getString("REC_NAME"), rs.getString("CATEGORY"),rs.getString("INSTRUCTIONS"),getIngriedents(rs.getString("REC_NAME"))));
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            ConnectDb.close(rs);
+            ConnectDb.close(pst);
+            ConnectDb.close(conn);
+        }
+        for(int x=0;x<recipes.size();x++){
+             RecipeList.add(recipes.get(x).getName());
+        }
+        
+    }//GEN-LAST:event_searchByIngriActionPerformed
+
+    private void RecipeListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RecipeListActionPerformed
+        int selected = RecipeList.getSelectedIndex();
+        for(int x =0;x<Recipe.get(selected).inrecipes.removeAll(recipes);)
+    }//GEN-LAST:event_RecipeListActionPerformed
+
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
+    public void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -77,8 +227,42 @@ public class RecipeFrame extends javax.swing.JFrame {
             }
         });
     }
+    public List<String> getIngriedents(String recipe){
+        List<String> ingriendents = new ArrayList<String>();
+        conn = ConnectDb.setupConnection();
+        try{ 
+            String sqlStatement = "select JMTBingredient.name from (JMTBrecipe natural join JMTBusesingredient natural join JMTBingredient) where recipet.name=?";
+            pst = (OraclePreparedStatement) conn.prepareStatement(sqlStatement);
+            pst.setString(1, recipe);
+            rs = (OracleResultSet) pst.executeQuery();
+            while (rs.next())
+            {
+                ingriendents.add(rs.getString("ING_NAME"));
+            }
+              
+          }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            ConnectDb.close(rs);
+            ConnectDb.close(pst);
+            ConnectDb.close(conn);
+        }
+          return ingriendents;
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private java.awt.List IngriendentList;
+    private java.awt.List RecipeList;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JTextArea recipeInstructions;
+    private javax.swing.JTextPane searchBar;
+    private javax.swing.JButton searchByCat;
+    private javax.swing.JButton searchByIngri;
     // End of variables declaration//GEN-END:variables
 
 }
