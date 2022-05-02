@@ -34,7 +34,7 @@ create table containsRecipe (
     planID char(3),
     recipeID char(5),
     day varchar2(10),
-    meal varchar2(10)
+    meal varchar2(10),
     primary key(planID, recipeID),
     constraint planFK foreign key (planID) references mealPlan(planID) on delete cascade,
     constraint recipeFK foreign key (recipeID) references recipe(recipeID) on delete cascade
@@ -64,19 +64,19 @@ insert into recipe values ('11111', 'pizza', 'italian', '1. Mix flour with water
 insert into recipe values ('11112', 'spaghetti', 'italian', '1. Boil spaghetti noodles in water. 2. Put sauce on noodles. 3. Put meatballs on sauce. 4. Add cheese to taste');
 insert into recipe values ('11113', 'scrambled eggs', 'american', '1. Crack eggs in bowl. 2. Use fork to scramble eggs. 3. Melt butter in pan. 4. Cook eggs in pan while stirring');
 
-//Pizza
+--Pizza
 insert into usesIngredient values ('11111', '111111');
 insert into usesIngredient values ('11111', '111112');
 insert into usesIngredient values ('11111', '111113');
 insert into usesIngredient values ('11111', '111114');
 
-//Spaghetti
+--Spaghetti
 insert into usesIngredient values ('11112', '111116');
 insert into usesIngredient values ('11112', '111113');
 insert into usesIngredient values ('11112', '111115');
 insert into usesIngredient values ('11112', '111112');
 
-//Scrambled eggs
+--Scrambled eggs
 insert into usesIngredient values ('11113', '111117');
 insert into usesIngredient values ('11113', '111118');
 
