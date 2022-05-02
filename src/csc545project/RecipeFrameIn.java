@@ -3,13 +3,26 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JInternalFrame.java to edit this template
  */
 package csc545project;
+import java.sql.Connection;
+import java.util.ArrayList;
+import java.util.List;
+import oracle.jdbc.OraclePreparedStatement;
+import oracle.jdbc.OracleResultSet;
 
 /**
  *
- * @author 2001k
+ * @author knux1
  */
 public class RecipeFrameIn extends javax.swing.JInternalFrame {
-
+    Connection conn = null;
+    OraclePreparedStatement pst = null;
+    OracleResultSet rs = null;
+    List<Recipe> recipes = new ArrayList<Recipe>();
+    Recipe selectedRecipe = null;
+    Ingredient SelectedFood = null;
+    List<Ingredient> allFood = null;
+    List<String> allFoodID = null;
+    boolean inFridge = false;
     /**
      * Creates new form RecipeFrameIn
      */
@@ -26,21 +39,712 @@ public class RecipeFrameIn extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jLayeredPane2 = new javax.swing.JLayeredPane();
+        newRecipeName = new javax.swing.JTextField();
+        newRecipeCategory = new javax.swing.JTextField();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        newRecipeInstructions = new javax.swing.JTextArea();
+        newFoodName = new javax.swing.JTextField();
+        newFoodCategory = new javax.swing.JTextField();
+        newFoodCalories = new javax.swing.JTextField();
+        newFoodSugar = new javax.swing.JTextField();
+        newFoodProtein = new javax.swing.JTextField();
+        newFoodSodium = new javax.swing.JTextField();
+        newFoodFat = new javax.swing.JTextField();
+        isInFridge = new javax.swing.JRadioButton();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        addNewFood = new javax.swing.JButton();
+        ingridientList = new java.awt.List();
+        newRecipeIngridients = new java.awt.List();
+        addFoodtoRecipe = new javax.swing.JButton();
+        removedFoodFromRecipe = new javax.swing.JButton();
+        submitNewRecipe = new javax.swing.JButton();
+        jLabel9 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        jLayeredPane1 = new javax.swing.JLayeredPane();
+        IngriendentList = new java.awt.List();
+        deleteRecipe = new javax.swing.JButton();
+        addNewRecipe = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        searchBar = new javax.swing.JTextPane();
+        searchByCat = new javax.swing.JButton();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        recipeInstructions = new javax.swing.JTextArea();
+        searchByIngri = new javax.swing.JButton();
+        RecipeList = new java.awt.List();
+
+        jLayeredPane2.setOpaque(true);
+
+        newRecipeInstructions.setColumns(20);
+        newRecipeInstructions.setRows(5);
+        jScrollPane2.setViewportView(newRecipeInstructions);
+
+        newFoodName.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                newFoodNameActionPerformed(evt);
+            }
+        });
+
+        newFoodCalories.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                newFoodCaloriesActionPerformed(evt);
+            }
+        });
+
+        isInFridge.setText("Already in Fridge?");
+        isInFridge.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                isInFridgeActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setText("Name");
+
+        jLabel2.setText("Category");
+
+        jLabel3.setText("Calories");
+
+        jLabel4.setText("Sugar");
+
+        jLabel5.setText("Sodium");
+
+        jLabel6.setText("Fat");
+
+        jLabel7.setText("Protein");
+
+        jLabel8.setText("New Food Entry");
+
+        addNewFood.setText("Add new Food Item");
+        addNewFood.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addNewFoodActionPerformed(evt);
+            }
+        });
+
+        ingridientList.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ingridientListActionPerformed(evt);
+            }
+        });
+
+        addFoodtoRecipe.setText("Add Selected");
+        addFoodtoRecipe.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addFoodtoRecipeActionPerformed(evt);
+            }
+        });
+
+        removedFoodFromRecipe.setText("jButton1");
+
+        submitNewRecipe.setText("SUBMIT");
+        submitNewRecipe.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                submitNewRecipeActionPerformed(evt);
+            }
+        });
+
+        jLabel9.setText("Name");
+
+        jLabel10.setText("Category");
+
+        jLabel11.setText("Instructions");
+
+        jLayeredPane2.setLayer(newRecipeName, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jLayeredPane2.setLayer(newRecipeCategory, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jLayeredPane2.setLayer(jScrollPane2, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jLayeredPane2.setLayer(newFoodName, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jLayeredPane2.setLayer(newFoodCategory, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jLayeredPane2.setLayer(newFoodCalories, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jLayeredPane2.setLayer(newFoodSugar, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jLayeredPane2.setLayer(newFoodProtein, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jLayeredPane2.setLayer(newFoodSodium, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jLayeredPane2.setLayer(newFoodFat, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jLayeredPane2.setLayer(isInFridge, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jLayeredPane2.setLayer(jLabel1, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jLayeredPane2.setLayer(jLabel2, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jLayeredPane2.setLayer(jLabel3, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jLayeredPane2.setLayer(jLabel4, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jLayeredPane2.setLayer(jLabel5, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jLayeredPane2.setLayer(jLabel6, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jLayeredPane2.setLayer(jLabel7, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jLayeredPane2.setLayer(jLabel8, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jLayeredPane2.setLayer(addNewFood, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jLayeredPane2.setLayer(ingridientList, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jLayeredPane2.setLayer(newRecipeIngridients, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jLayeredPane2.setLayer(addFoodtoRecipe, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jLayeredPane2.setLayer(removedFoodFromRecipe, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jLayeredPane2.setLayer(submitNewRecipe, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jLayeredPane2.setLayer(jLabel9, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jLayeredPane2.setLayer(jLabel10, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jLayeredPane2.setLayer(jLabel11, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        javax.swing.GroupLayout jLayeredPane2Layout = new javax.swing.GroupLayout(jLayeredPane2);
+        jLayeredPane2.setLayout(jLayeredPane2Layout);
+        jLayeredPane2Layout.setHorizontalGroup(
+            jLayeredPane2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jLayeredPane2Layout.createSequentialGroup()
+                .addGap(151, 151, 151)
+                .addComponent(jLabel11)
+                .addGap(18, 18, 18)
+                .addGroup(jLayeredPane2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jLayeredPane2Layout.createSequentialGroup()
+                        .addGroup(jLayeredPane2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(jLayeredPane2Layout.createSequentialGroup()
+                                .addComponent(jLabel10)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(newRecipeCategory, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jLayeredPane2Layout.createSequentialGroup()
+                                .addComponent(jLabel9)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(newRecipeName, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 315, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jLayeredPane2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jLayeredPane2Layout.createSequentialGroup()
+                                .addGap(29, 29, 29)
+                                .addComponent(isInFridge))
+                            .addGroup(jLayeredPane2Layout.createSequentialGroup()
+                                .addGap(18, 18, 18)
+                                .addGroup(jLayeredPane2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(addNewFood)
+                                    .addGroup(jLayeredPane2Layout.createSequentialGroup()
+                                        .addGroup(jLayeredPane2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel1)
+                                            .addComponent(jLabel2)
+                                            .addComponent(jLabel3)
+                                            .addComponent(jLabel5)
+                                            .addComponent(jLabel6)
+                                            .addComponent(jLabel7)
+                                            .addComponent(jLabel4)
+                                            .addComponent(jLabel8))
+                                        .addGap(37, 37, 37)
+                                        .addGroup(jLayeredPane2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(newFoodName)
+                                            .addComponent(newFoodCategory)
+                                            .addComponent(newFoodCalories)
+                                            .addComponent(newFoodSugar)
+                                            .addComponent(newFoodProtein)
+                                            .addComponent(newFoodSodium)
+                                            .addComponent(newFoodFat, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(ingridientList, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jLayeredPane2Layout.createSequentialGroup()
+                        .addComponent(addFoodtoRecipe)
+                        .addGap(42, 42, 42)))
+                .addGroup(jLayeredPane2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jLayeredPane2Layout.createSequentialGroup()
+                        .addGap(35, 35, 35)
+                        .addComponent(newRecipeIngridients, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(submitNewRecipe, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(43, 43, 43))
+                    .addGroup(jLayeredPane2Layout.createSequentialGroup()
+                        .addGap(80, 80, 80)
+                        .addComponent(removedFoodFromRecipe)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+        );
+        jLayeredPane2Layout.setVerticalGroup(
+            jLayeredPane2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jLayeredPane2Layout.createSequentialGroup()
+                .addGroup(jLayeredPane2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jLayeredPane2Layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addComponent(jLabel8)
+                        .addGap(18, 18, 18)
+                        .addGroup(jLayeredPane2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(newRecipeIngridients, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(jLayeredPane2Layout.createSequentialGroup()
+                                .addGroup(jLayeredPane2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(newRecipeName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(newFoodName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel1)
+                                    .addComponent(jLabel9))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(jLayeredPane2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(newRecipeCategory, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(newFoodCategory, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel2)
+                                    .addComponent(jLabel10))
+                                .addGap(12, 12, 12)
+                                .addGroup(jLayeredPane2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 392, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(jLayeredPane2Layout.createSequentialGroup()
+                                        .addGroup(jLayeredPane2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                            .addComponent(newFoodCalories, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jLabel3))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addGroup(jLayeredPane2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                            .addComponent(newFoodSugar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jLabel4))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addGroup(jLayeredPane2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                            .addComponent(newFoodProtein, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jLabel7))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addGroup(jLayeredPane2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                            .addComponent(newFoodSodium, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jLabel5))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addGroup(jLayeredPane2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                            .addComponent(newFoodFat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jLabel6))
+                                        .addGap(18, 18, 18)
+                                        .addComponent(isInFridge)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(addNewFood))
+                                    .addComponent(jLabel11)))
+                            .addComponent(ingridientList, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(jLayeredPane2Layout.createSequentialGroup()
+                        .addGap(227, 227, 227)
+                        .addComponent(submitNewRecipe, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jLayeredPane2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(addFoodtoRecipe)
+                    .addComponent(removedFoodFromRecipe))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jLayeredPane1.addHierarchyListener(new java.awt.event.HierarchyListener() {
+            public void hierarchyChanged(java.awt.event.HierarchyEvent evt) {
+                jLayeredPane1HierarchyChanged(evt);
+            }
+        });
+
+        deleteRecipe.setText("Delete Selected");
+        deleteRecipe.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteRecipeActionPerformed(evt);
+            }
+        });
+
+        addNewRecipe.setText("Add New Recipe");
+        addNewRecipe.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addNewRecipeActionPerformed(evt);
+            }
+        });
+
+        jScrollPane1.setViewportView(searchBar);
+
+        searchByCat.setText("Search by Category");
+        searchByCat.setActionCommand("search");
+        searchByCat.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                searchByCatActionPerformed(evt);
+            }
+        });
+
+        recipeInstructions.setColumns(20);
+        recipeInstructions.setRows(5);
+        jScrollPane4.setViewportView(recipeInstructions);
+
+        searchByIngri.setText("Search by Igridient");
+        searchByIngri.setActionCommand("search");
+        searchByIngri.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                searchByIngriActionPerformed(evt);
+            }
+        });
+
+        RecipeList.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                RecipeListActionPerformed(evt);
+            }
+        });
+
+        jLayeredPane1.setLayer(IngriendentList, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jLayeredPane1.setLayer(deleteRecipe, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jLayeredPane1.setLayer(addNewRecipe, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jLayeredPane1.setLayer(jScrollPane1, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jLayeredPane1.setLayer(searchByCat, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jLayeredPane1.setLayer(jScrollPane4, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jLayeredPane1.setLayer(searchByIngri, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jLayeredPane1.setLayer(RecipeList, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        javax.swing.GroupLayout jLayeredPane1Layout = new javax.swing.GroupLayout(jLayeredPane1);
+        jLayeredPane1.setLayout(jLayeredPane1Layout);
+        jLayeredPane1Layout.setHorizontalGroup(
+            jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jLayeredPane1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jLayeredPane1Layout.createSequentialGroup()
+                        .addComponent(addNewRecipe)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(deleteRecipe)
+                        .addGap(28, 28, 28))
+                    .addGroup(jLayeredPane1Layout.createSequentialGroup()
+                        .addGroup(jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jLayeredPane1Layout.createSequentialGroup()
+                                .addGap(6, 6, 6)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 237, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(searchByCat)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(searchByIngri))
+                            .addGroup(jLayeredPane1Layout.createSequentialGroup()
+                                .addComponent(RecipeList, javax.swing.GroupLayout.PREFERRED_SIZE, 307, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(IngriendentList, javax.swing.GroupLayout.PREFERRED_SIZE, 265, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 816, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+        );
+        jLayeredPane1Layout.setVerticalGroup(
+            jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jLayeredPane1Layout.createSequentialGroup()
+                .addGap(18, 18, 18)
+                .addGroup(jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(searchByCat)
+                        .addComponent(searchByIngri))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jScrollPane4)
+                    .addComponent(RecipeList, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(IngriendentList, javax.swing.GroupLayout.PREFERRED_SIZE, 481, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(deleteRecipe)
+                    .addComponent(addNewRecipe))
+                .addGap(127, 127, 127))
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 394, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLayeredPane1)
+                .addContainerGap())
+            .addComponent(jLayeredPane2)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 274, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLayeredPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 591, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLayeredPane2)
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void newFoodNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newFoodNameActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_newFoodNameActionPerformed
+
+    private void newFoodCaloriesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newFoodCaloriesActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_newFoodCaloriesActionPerformed
+
+    private void isInFridgeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_isInFridgeActionPerformed
+        if(inFridge){
+            inFridge = false;
+        }
+        else{
+            inFridge =true;
+        }
+    }//GEN-LAST:event_isInFridgeActionPerformed
+
+    private void addNewFoodActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addNewFoodActionPerformed
+        String Name = null;
+        String Category = null;
+        int Calories = 0;
+        int Sugar = 0;
+        int Protein = 0;
+        int Sodium = 0;
+        int Fat = 0;
+        try{
+            Name = newFoodName.getText();
+            Category = newFoodCategory.getText();
+            Calories = Integer.parseInt(newFoodCalories.getText());
+            Sugar = Integer.parseInt(newFoodSugar.getText());
+            Protein = Integer.parseInt(newFoodProtein.getText());
+            Sodium = Integer.parseInt(newFoodSodium.getText());
+            Fat = Integer.parseInt(newFoodFat.getText());
+        }
+        catch(NumberFormatException e){
+            e.printStackTrace();
+        }
+        Ingredient newFood = new Ingredient(Name,Category,Calories,Sugar,Protein,Sodium,Fat,inFridge);
+        allFood.add(newFood);
+        newRecipeIngridients.add(Name);
+        conn = ConnectDb.setupConnection();
+        try
+        {
+            String sqlStatement = "select ingredientID from JBMTinngredient Where name=?,calories=?,sugar=?,protein=?,sodium=?,fat=?";
+            // Do we want to print the category along with this considering this is what we searched by.
+            pst = (OraclePreparedStatement) conn.prepareStatement(sqlStatement);
+            pst.setString(1, Name);
+            pst.setString(2,  Category);
+            pst.setString(3,  Calories+"");
+            pst.setString(4,  Sugar+"");
+            pst.setString(5,  Protein+"");
+            pst.setString(6,  Fat+"");
+            rs = (OracleResultSet) pst.executeQuery();
+            while (rs.next())
+            {
+                allFoodID.add(rs.getString("INGREDIENTID"));
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            ConnectDb.close(rs);
+            ConnectDb.close(pst);
+            ConnectDb.close(conn);
+        }
+    }//GEN-LAST:event_addNewFoodActionPerformed
+
+    private void ingridientListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ingridientListActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ingridientListActionPerformed
+
+    private void addFoodtoRecipeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addFoodtoRecipeActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_addFoodtoRecipeActionPerformed
+
+    private void submitNewRecipeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitNewRecipeActionPerformed
+        List<String> empty = new ArrayList();
+        Recipe newRecipe = new Recipe(newRecipeName.getText(),newRecipeCategory.getText(),newRecipeInstructions.getText(),empty);
+        int recipeID= 0;
+        newRecipe.saveToDatabase();
+        try
+        {
+            String sqlStatement = "select id from JMBTrecipe where name=? and category=?";
+            // Do we want to print the category along with this considering this is what we searched by.
+            pst = (OraclePreparedStatement) conn.prepareStatement(sqlStatement);
+            pst.setString(1, newRecipe.getName());
+            pst.setString(2, newRecipe.getCategory());
+
+            rs = (OracleResultSet) pst.executeQuery();
+            while (rs.next())
+            {
+                recipeID = rs.getInt("ID");
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            ConnectDb.close(rs);
+            ConnectDb.close(pst);
+            ConnectDb.close(conn);
+        }
+        for(int x = 0; x < newRecipeIngridients.getWidth();x++){
+            try
+            {
+                //Adding the INgredients for the Recipe
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+            finally
+            {
+                ConnectDb.close(pst);
+                ConnectDb.close(conn);
+            }
+        }
+    }//GEN-LAST:event_submitNewRecipeActionPerformed
+
+    private void deleteRecipeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteRecipeActionPerformed
+        conn = ConnectDb.setupConnection();
+        List<Recipe> recipes = new ArrayList<Recipe>();
+        try
+        {
+            String sqlStatement = "delete JMTBrecipe where name=? and category = ?";
+            // Do we just want the recipe and category here? Are we also wanting to include the associated ingredients with these, or the instructions?
+            // What about days of these meals? Are we wanting to give the user information on when this meal is scheduled for?
+            pst = (OraclePreparedStatement) conn.prepareStatement(sqlStatement);
+            pst.setString(1,  selectedRecipe.getName());
+            pst.setString(2,  selectedRecipe.getCategory());
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            ConnectDb.close(pst);
+            ConnectDb.close(conn);
+        }
+        recipes.remove(selectedRecipe);
+        RecipeList.remove(selectedRecipe.getName());
+        IngriendentList.removeAll();
+        recipeInstructions.setText("");
+    }//GEN-LAST:event_deleteRecipeActionPerformed
+
+    private void addNewRecipeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addNewRecipeActionPerformed
+        jLayeredPane2.setLayer(jLayeredPane2, 0);
+        jLayeredPane1.setLayer(jLayeredPane1, 0);
+        conn = ConnectDb.setupConnection();
+        try
+        {
+            String sqlStatement = "select * from JBMTinngredient";
+            // Do we want to print the category along with this considering this is what we searched by.
+            pst = (OraclePreparedStatement) conn.prepareStatement(sqlStatement);
+
+            rs = (OracleResultSet) pst.executeQuery();
+            while (rs.next())
+            {
+                allFood.add(new Ingredient(rs.getString("NAME"),rs.getString("CATEGORY"),rs.getInt("CALORIES"),rs.getInt("SUGAR"),rs.getInt("PROTEIN"),rs.getInt("SODIUM"),rs.getInt("FAT"),rs.getBoolean("INFRIDGE")));
+                allFoodID.add(rs.getString("INGREDIENTID"));
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            ConnectDb.close(rs);
+            ConnectDb.close(pst);
+            ConnectDb.close(conn);
+        }
+
+    }//GEN-LAST:event_addNewRecipeActionPerformed
+
+    private void searchByCatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchByCatActionPerformed
+        RecipeList.removeAll();
+        recipes.removeAll(recipes);
+        Connection conn = ConnectDb.setupConnection();
+        try
+        {
+            String sqlStatement = "select name, category,instructions from JMTBrecipe where category=?";
+            // Do we want to print the category along with this considering this is what we searched by.
+            pst = (OraclePreparedStatement) conn.prepareStatement(sqlStatement);
+            pst.setString(1, searchBar.getText());
+
+            rs = (OracleResultSet) pst.executeQuery();
+            while (rs.next())
+            {
+                recipes.add(new Recipe(rs.getString("REC_NAME"), rs.getString("CATEGORY"),rs.getString("INSTRUCTIONS"),getIngriedents(rs.getString("REC_NAME"))));
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            ConnectDb.close(rs);
+            ConnectDb.close(pst);
+            ConnectDb.close(conn);
+        }
+        for(int x=0;x<recipes.size();x++){
+            RecipeList.add(recipes.get(x).getName() + recipes.get(x).getCategory());
+        }
+    }//GEN-LAST:event_searchByCatActionPerformed
+
+    private void searchByIngriActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchByIngriActionPerformed
+        RecipeList.removeAll();
+        recipes.removeAll(recipes);
+        conn = ConnectDb.setupConnection();
+        List<Recipe> recipes = new ArrayList<Recipe>();
+        try
+        {
+            String sqlStatement = "select JMTBrecipe.name, category,instructions from (JMTBrecipe natural join JMTBusesingredient natural join JMTBingredient) where JMTBingredient.name=?";
+            // Do we just want the recipe and category here? Are we also wanting to include the associated ingredients with these, or the instructions?
+            // What about days of these meals? Are we wanting to give the user information on when this meal is scheduled for?
+            pst = (OraclePreparedStatement) conn.prepareStatement(sqlStatement);
+            pst.setString(1,  searchBar.getText());
+
+            rs = (OracleResultSet) pst.executeQuery();
+            System.out.println("Recipes returned:");
+            while (rs.next())
+            {
+                recipes.add(new Recipe(rs.getString("REC_NAME"), rs.getString("CATEGORY"),rs.getString("INSTRUCTIONS"),getIngriedents(rs.getString("REC_NAME"))));
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            ConnectDb.close(rs);
+            ConnectDb.close(pst);
+            ConnectDb.close(conn);
+        }
+        for(int x=0;x<recipes.size();x++){
+            RecipeList.add(recipes.get(x).getName() + recipes.get(x).getCategory());
+        }
+    }//GEN-LAST:event_searchByIngriActionPerformed
+
+    private void RecipeListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RecipeListActionPerformed
+        int selected = RecipeList.getSelectedIndex();
+        List<String> Ingridients =  recipes.get(selected).getIngriedents();
+        for(int x =0;x<Ingridients.size()-1;x++){
+            IngriendentList.add(Ingridients.get(x));
+        }
+        recipeInstructions.setText(recipes.get(selected).getInstructions());
+        selectedRecipe = recipes.get(selected);
+    }//GEN-LAST:event_RecipeListActionPerformed
+
+    private void jLayeredPane1HierarchyChanged(java.awt.event.HierarchyEvent evt) {//GEN-FIRST:event_jLayeredPane1HierarchyChanged
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jLayeredPane1HierarchyChanged
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private java.awt.List IngriendentList;
+    private java.awt.List RecipeList;
+    private javax.swing.JButton addFoodtoRecipe;
+    private javax.swing.JButton addNewFood;
+    private javax.swing.JButton addNewRecipe;
+    private javax.swing.JButton deleteRecipe;
+    private java.awt.List ingridientList;
+    private javax.swing.JRadioButton isInFridge;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JLayeredPane jLayeredPane1;
+    private javax.swing.JLayeredPane jLayeredPane2;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JTextField newFoodCalories;
+    private javax.swing.JTextField newFoodCategory;
+    private javax.swing.JTextField newFoodFat;
+    private javax.swing.JTextField newFoodName;
+    private javax.swing.JTextField newFoodProtein;
+    private javax.swing.JTextField newFoodSodium;
+    private javax.swing.JTextField newFoodSugar;
+    private javax.swing.JTextField newRecipeCategory;
+    private java.awt.List newRecipeIngridients;
+    private javax.swing.JTextArea newRecipeInstructions;
+    private javax.swing.JTextField newRecipeName;
+    private javax.swing.JTextArea recipeInstructions;
+    private javax.swing.JButton removedFoodFromRecipe;
+    private javax.swing.JTextPane searchBar;
+    private javax.swing.JButton searchByCat;
+    private javax.swing.JButton searchByIngri;
+    private javax.swing.JButton submitNewRecipe;
     // End of variables declaration//GEN-END:variables
 }
