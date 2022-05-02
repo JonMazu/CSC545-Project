@@ -16,6 +16,7 @@ create table recipe (
     recipeID char(5) primary key,
     name varchar2(20),
     category varchar2(20),
+    instructions varchar2(32672)
     -- Not sure what best way to store instructions in DB is. Would depend on total length
     -- Instructions needs to be either varchar paragraph or a link based
 );
